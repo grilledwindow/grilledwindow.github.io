@@ -1,0 +1,47 @@
+$main-font: 'Century Gothic'
+$title-font: 'Consolas'
+$bg-color: #3b3b46
+$other-bg-color: #717d84
+$font-color: #eceded
+  
+nav
+  background-color: $other-bg-color
+  font-family: $title-font
+  height: fit-content
+
+body
+  background-color: $bg-color
+  color: $font-color
+  font-family: $title-font
+  margin: 0
+
+section, nav
+  padding: 0.5em
+
+a, a:visited
+  color: $font-color
+
+h1
+  font-family: $title-font
+
+@media screen and ( min-width: 960px )
+
+  .nav-container
+    position: fixed
+    width: 20%
+    height: 100%
+    float: left
+
+  .main-container
+    width: 80%
+    float: right
+
+  nav
+    height: 100%
+    display: flex
+    flex-flow: column
+    // justify-content: center
+    text-align: right
+
+// @media screen and ( min-width: 1280px )
+// @media screen and ( min-width: 1920px )
