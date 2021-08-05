@@ -20,7 +20,6 @@ I also serve in the Boys' Brigade as a Primer, teaching the skills I learnt as a
 - Adobe XD
 - Adobe Illustrator
 
-
 ## Education
 2010-2015 \
 Marsiling Primary School \
@@ -40,16 +39,19 @@ CGPA: 3.78
 2012-2013: Tchoukball \
 2014-2015: Taekwondo \
 2016-2019: Boys' Brigade Seniors Programme \
-2020-20XX: Boys' Birgade Primers Programme \
+2020-20XX: Boys' Birgade Primers Programme
 
 ## Achievements
 ### Boys' Brigade
-Warrant Officer (highest rank) \
+Warrant Officer rank \
 The Founder's Badge \
 Senior Proficiency Award \
 Intermediate Proficiency Award \
 Kayaking One Star \
 Leadership Development Course 204 \
+2nd place, Inter-UG Drill Competition 2018 \
+5th place, Character Quest 2017 \
+Silver, Blaze 2018 & 2019
 
 ### Australian Mathematics Competition
 2016: Certificate of Credit, Junior Division \
