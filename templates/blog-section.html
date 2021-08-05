@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>
+  {{ section.title }}
+</h2>
+<section>
+  {{ section.content | safe }}
+</section>
+<div class="flex col">
+  <!-- {% set posts = get_section(path="blog/2021/_index.md") %}
+  <li><a href="{{ posts.permalink }}">{{ posts.title }}</a></li> -->
+  {% for page in section.pages %}
+  <a href="{{ page.permalink }}">{{ page.title }}</a>
+  {% endfor %}
+</div>
+{% endblock content %}

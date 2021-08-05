@@ -1,47 +1,98 @@
 $main-font: 'Century Gothic'
 $title-font: 'Consolas'
-$bg-color: #3b3b46
-$other-bg-color: #717d84
-$font-color: #eceded
-  
-nav
-  background-color: $other-bg-color
-  font-family: $title-font
-  height: fit-content
+$bg-color: #222
+$other-bg-color: #2E2E2E
+$font-color: #eee
+$accent-1: #EDD4BB
+$accent-2: #BBD4ED
 
-body
+*::-webkit-scrollbar
+  width: 1em
+  background-color: $other-bg-color
+
+*::-webkit-scrollbar-thumb
+  background-color: $accent-1
+
+*::-webkit-scrollbar-thumb
+  border-radius: 1em 0 0 1em
+
+#awards::-webkit-scrollbar, #awards::-webkit-scrollbar-thumb
+  border-radius: 0 0 1em 1em
+
+
+html, body
+  height: calc(100% - 1em)
+  align-items: center
   background-color: $bg-color
   color: $font-color
   font-family: $title-font
+
+main, header
+  width: calc(100% - 2em)
+  max-width: 800px
+
+main
+  margin-top: 5em
+
+header
+  max-width: 600px
+  z-index: 20
+  position: fixed
+  justify-content: space-between
+  align-items: center
+  height: 3em
+  background-color: $other-bg-color
+  border-radius: 1.5em
+
+header a
+  text-decoration: none
+
+header > *
+  margin: 1.5em
+
+h2
+  color: $accent-1
+
+h3
+  color: $accent-2
+
+h2, h3
   margin: 0
+  margin-top: 1em
 
-section, nav
-  padding: 0.5em
-
-a, a:visited
+a
   color: $font-color
 
-h1
-  font-family: $title-font
+.flex
+  display: flex
+  flex-flow: row
 
-@media screen and ( min-width: 960px )
+.flex.col
+  flex-flow: column
 
-  .nav-container
-    position: fixed
-    width: 20%
-    height: 100%
-    float: left
+img
+  width: 100%
+  border-radius: 1em
 
-  .main-container
-    width: 80%
-    float: right
+#awards
+  overflow-x: auto
+  height: calc(100vh - 8em)
+  border-radius: 1em
 
-  nav
-    height: 100%
-    display: flex
-    flex-flow: column
-    // justify-content: center
-    text-align: right
+#awards img
+  width: auto
+  // height: calc(50%)
+@media screen and ( max-width: 640px )
+  header
+    bottom: 1em
 
-// @media screen and ( min-width: 1280px )
-// @media screen and ( min-width: 1920px )
+  main
+    margin-top: 0
+    padding-bottom: 4em
+  
+  #awards
+    margin-top: 1em
+
+@media screen and ( min-width: 640px )
+  header
+    top: 1em

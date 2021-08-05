@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="awards" class="flex">
+  {% for asset in page.assets -%}
+    {%- if asset is matching("[.](jpg|jpeg|png)$") -%}
+      <img src="{{ asset }}" />
+    {%- endif %}
+  {%- endfor %}
+</div>
+{% endblock %}
