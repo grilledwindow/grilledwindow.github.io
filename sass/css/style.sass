@@ -1,8 +1,11 @@
-$main-font: 'Century Gothic'
-$title-font: 'Consolas'
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&family=Fira+Mono&family=Inconsolata&family=Lora&family=PT+Serif&family=Roboto+Mono&display=swap')
+$main-font: 'Montserrat', sans-serif
+$title-font: 'Courier Prime', 'Fira Mono', 'Inconsolata', 'Roboto Mono', monospace
+$article-font: 'PT Serif', 'Lora', serif
+
 $bg-color: #222
 $other-bg-color: #2E2E2E
-$font-color: #eee
+$font-color: #D3D3D3
 $accent-1: #EDD4BB
 $accent-2: #BBD4ED
 
@@ -19,13 +22,12 @@ $accent-2: #BBD4ED
 #awards::-webkit-scrollbar, #awards::-webkit-scrollbar-thumb
   border-radius: 0 0 1em 1em
 
-
 html, body
   height: calc(100% - 1em)
   align-items: center
   background-color: $bg-color
   color: $font-color
-  font-family: $title-font
+  font-family: $main-font
 
 main, header
   width: calc(100% - 2em)
@@ -51,6 +53,9 @@ header > *
   margin-left: 1em
   margin-right: 1em
 
+header a:nth-child(1)
+  margin-left: 1.5em
+
 #icons-wrapper a
   max-height: 32px
 
@@ -60,9 +65,17 @@ h2
 h3
   color: $accent-2
 
-h2, h3
+h1, h2, h3
   margin: 0
   margin-top: 1em
+
+#about-me + p
+  font-size: 1.1em
+
+.article
+  font-size: 1.2em
+  // font-family: $article-font
+  line-height: 1.5em
 
 a
   color: $font-color
@@ -94,7 +107,7 @@ img
   main
     margin-top: 0
     padding-bottom: 4em
-  
+
   #awards
     margin-top: 1em
 
