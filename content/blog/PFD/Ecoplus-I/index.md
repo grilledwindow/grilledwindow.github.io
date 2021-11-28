@@ -31,6 +31,9 @@ Smart guy, math genius
 - Xavier (me, Developer)\
 Chill, likes coding
 
+![The team](https://vvepvewuqredhipsutal.supabase.in/storage/v1/object/public/xa/ecoplus/team.png)
+Left to right: Wai Keat, Kah Seng, Xavier (me), Aung, Wei Chong
+
 ### Ideation
 What's something that's highly accessible?\
 That's right, a website.
@@ -57,7 +60,7 @@ I chose to work on the database and web hosting since I suggested the technologi
 So far, it's going great, but what about our project's name?
 We spent a good 1.5 hours deciding on it.
 We used a name generator, {{ link(link="https://namelix.com/", title="namelix") }} to aid our brainstorming.
-Some of us saw the name "Seed Seed" and really liked it, but some others were strongly opposed to this (ahem, Kah Seng).
+Some of us saw the name "Seed Seed" and really liked it, but some were strongly opposed to this (ahem, Kah Seng).
 We came across other catchy names and went through multiple rounds of voting.
 It was tough to settle on a name when some members like it and others don't.
 We brainstormed a lil longer and came up with "Ecoplus", inspired by C++.
