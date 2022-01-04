@@ -14,6 +14,9 @@ We need to conserve our natural resources and ensure a clean environment to live
 Where does technology come into the picture? It can be used to spread awareness of this problem and educate people on the importance of protecting our Earth, among other methods.
 
 In the first week, we created a team and brainstormed some ideas.
+Quite a number of students from my class chose this challenge statement too.
+I was lucky to team up with some of them, two of whom (Kah Seng and Wai Keat) I have worked with before.
+I looked forward to working with the other two (Wei Chong and Aung) as I have never worked with them before.
 
 ### The team
 - Kah Seng (Scrum master)\
