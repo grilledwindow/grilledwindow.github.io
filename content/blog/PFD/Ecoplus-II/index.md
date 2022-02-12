@@ -60,7 +60,7 @@ We also went for another round of Nerf but this time we got less points.
 Towards the end of the day, it was announced that we tied for first place with another team.
 We got a huuuge bag of snacks as a prize, which I appreciate.
 
-![Nerf station](https://vvepvewuqredhipsutal.supabase.in/storage/v1/object/public/xa/ecoplus/nerf-station.png)
+![Nerf station](nerf-station.png)
 
 Again, I went home tired and slept until 930 pm. We had a rehearsal for our presentation at 10pm.
 

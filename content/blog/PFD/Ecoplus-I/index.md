@@ -34,7 +34,7 @@ Smart guy, math genius
 - Xavier (me, Developer)\
 Chill, likes coding
 
-![The team](https://vvepvewuqredhipsutal.supabase.in/storage/v1/object/public/xa/ecoplus/team.png)
+![The team](team.png)
 Left to right: Wai Keat, Kah Seng, Xavier (me), Aung, Wei Chong
 
 ### Ideation
