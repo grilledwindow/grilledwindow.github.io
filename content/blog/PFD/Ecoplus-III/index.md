@@ -67,7 +67,8 @@ const { data: imgData, error: imgError } = await supabase.storage.from('public')
     cacheControl: "0",
   });
 if (imgError) throw { error: imgError, session: newSession };
-
+```
+```javascript
 const { data: userData, error: userError } = await supabase
   .from("users")
   .update({ has_img: true })
@@ -138,7 +139,8 @@ function fillComments(elementCss, posts) {
     // To display a grey circle (if user doesn't have profile picture)
     const _pfpDiv = document.createElement("div");
     _pfpDiv.classList.add("rounded-full", "bg-gray-200", "h-12", "w-12");
-
+```
+```javascript
     // Comment container for _username and _comment
     const _commentContent = document.createElement("div");
     _commentContent.classList.add("ml-4", "flow-col");
@@ -151,7 +153,8 @@ function fillComments(elementCss, posts) {
     _datetime.style.color = "rgb(156 163 175)";
 
     const _comment = document.createElement("p");
-
+```
+```javascript
     for (const post of posts) {
         let commentContainer = _commentContainer.cloneNode(true);
         let pfp;
@@ -167,6 +170,8 @@ function fillComments(elementCss, posts) {
         } else {
             pfp = _pfpDiv.cloneNode(true);
         }
+```
+```javascript
         username.insertAdjacentText("afterbegin", post.username);
         datetime.insertAdjacentText("afterbegin", datetimeFormat(post.created_at));
         comment.insertAdjacentText("afterbegin", post.post);
@@ -181,7 +186,8 @@ function fillComments(elementCss, posts) {
     $(elementCss).empty();
     $(elementCss).append(commentsFragment);
 }
-
+```
+```javascript
 function datetimeFormat(datetime) {
     const d = new Date(datetime);
     const date = `${d.getDay()}/${d.getMonth() + 1}/${d.getFullYear() % 100}`;
