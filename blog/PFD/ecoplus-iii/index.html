@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xa</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="flex col">
+  <header class="flex">
+    <a href="/">Home</a>
+    <a href="/blog/">Blog</a>
+    <a href="/awards/">Awards</a>
+    <div id="icons-wrapper" class="flex">
+      <a href="https://www.linkedin.com/in/xave" target="_blank"><img src="/icons/linkedin.svg" alt="linkedin"></a>
+      <a href="https://github.com/grilledwindow?tab=repositories" target="_blank"><img src="/icons/github.svg" alt="github"></a>
+    </div>
+  </header>
+  <main class="flex col">
+    
+<h1>
+  Ecoplus III: New Features and Image Handling
+</h1>
+<p><strong>2022-02-12</strong></p>
+<div class="article">
+  <p>After the hackathon, we took a break for a few weeks before embarking on our last two sprints.
+During the hackathon, I failed to implement image upload and delete functionality, so that naturally became my goal for the remaining weeks.
+In the third sprint, I added image upload functionality, and in the fourth sprint, I added image delete functionality and ensured a consistent UI across the pages which had image modification operations involved.</p>
+<h2 id="new-features">New Features</h2>
+<p>In the last two sprints, here are the features we added:</p>
+<p>General </p>
+<ul>
+<li>Model annotations with tooltips</li>
+<li>Upcoming Events</li>
+<li>Forgot password</li>
+</ul>
+<p>Community </p>
+<ul>
+<li>Editing, deleting, and leaving of community</li>
+<li>Upload of profile and cover photos</li>
+<li>Search by name</li>
+</ul>
+<p>Event </p>
+<ul>
+<li>Editing and deleting of event</li>
+<li>Upload of profile and cover photos</li>
+<li>Event location map </li>
+</ul>
+<p>Account </p>
+<ul>
+<li>Editing of account details</li>
+<li>Upload and delete profile photo</li>
+</ul>
+<p>Education </p>
+<ul>
+<li>Recycling Page</li>
+<li>Interactive game</li>
+</ul>
+<h2 id="image-handling">Image handling</h2>
+<h3 id="netlify-image-handling">Netlify image handling</h3>
+<p>The problem I faced was that Netlify functions couldn't handle multipart form data such as images properly.
+It actually took me a lot of time researching this issue, only to find out I couldn't send images to the server the traditional way and had to look for alternative methods.</p>
+<p>I settled with sending a base64-encoded string instead of the image file, which worked well.
+One caveat of this method is that large images would not upload properly as their base64-encoded string would be too large.</p>
+<h3 id="storing-images-on-supabase">Storing images on Supabase</h3>
+<p>After receiving the base64-encoded string in the serverless function, I decoded it to create a Buffer and sent it to Supabase.
+On Supabase's side, I also ran into a lot of issues with basic CRUD operations.
+I needed to add the suitable PostgreSQL policies for the storage we used for storing files.
+The policies I added allowed anyone to read from the storage, and only authenticated users, aka those with an account, to create, upload, and delete from the storage.</p>
+<p><img src="https://xave.is-a.dev/blog/PFD/ecoplus-iii/supabase-objects-policies.png" alt="Storage.buckets policies" /></p>
+<p>I added a <code>has_img</code> column to the <code>users</code> table to tell if the user has added or deleted their profile photo.
+If <code>false</code>, it means that they have no profile picture set - this is the default.
+If <code>true</code>, it means that they have a profile picture set.
+The URL is then constructed using the user's <code>userID</code>.</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">const fileName = `users&#x2F;${session.user.id}.jpg`;
+const buf = Buffer.from(img, &#x27;base64&#x27;);
+
+const { data: imgData, error: imgError } = await supabase.storage.from(&#x27;public&#x27;)
+  .upload(fileName, buf, {
+    contentType: &quot;image&#x2F;jpeg&quot;,
+    upsert: true,
+    cacheControl: &quot;0&quot;,
+  });
+if (imgError) throw { error: imgError, session: newSession };
+</code></pre>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">const { data: userData, error: userError } = await supabase
+  .from(&quot;users&quot;)
+  .update({ has_img: true })
+  .eq(&quot;id&quot;, session.user.id);
+if (userError) throw { error: userError }
+
+return {
+  statusCode: 200,
+  body: JSON.stringify({
+    imgUrl: `https:&#x2F;&#x2F;stolploftqaslfirbfsf.supabase.in&#x2F;storage&#x2F;v1&#x2F;object&#x2F;public&#x2F;${imgData.Key}`,
+    session: newSession,
+  }),
+};
+</code></pre>
+<h3 id="session-management">Session management</h3>
+<p>Another problem I ran into was that I needed the user's current login session so that they can upload or delete images.
+Our current method of keeping the user &quot;logged in&quot; is storing their <code>userID</code> and <code>username</code> in the session storage.
+This was unsafe as the user can easily change it and cause errors when doing database operations.
+Hence, I decided to add some form of session handling as well.</p>
+<p>To do this, I stored the user's session whenever they signed up or signed in, and sent the session data to the serverless functions every request.
+I then set the session as shown:</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">const { session, error: sessionError } = await supabase.auth.setSession(clientSession.refresh_token);
+const { data: newSession } = await supabase.auth.refreshSession();
+</code></pre>
+<p>I had to use this method because the Supabase JavaScript client is more suited for using it on the client-side, but it is only safe to do so if I've added proper Row-Level Security (RLS) on the database, which I didn't have time to implement.</p>
+<h3 id="account-page-ui">Account page UI</h3>
+<p>After settling most of the backend issues, I proceeded to create the front-end.
+In the user's account page, I added a button for the user to change their photo.</p>
+<p><img src="https://xave.is-a.dev/blog/PFD/ecoplus-iii/account.png" alt="Account page" /></p>
+<p>On clicking it, a modal form is showed that allows the user to select an image and upload it.</p>
+<p><img src="https://xave.is-a.dev/blog/PFD/ecoplus-iii/image-upload-modal.png" alt="Image upload modal" /></p>
+<p>I also added a delete button, whose operation was not that much of a hassle as uploading the image to implement.</p>
+<p><img src="https://xave.is-a.dev/blog/PFD/ecoplus-iii/image-delete-modal.png" alt="Image delete modal" /></p>
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<p>After I had done the image upload and delete functionality, Kah Seng used my code as a guide for doing adding the same funcionality to the community and event pages.
+However, his UI was a bit different, so I changed mine to fit his.
+He also forgot to add the code for previewing the uploaded image, so I did that for him since he was very busy implementing the other features.</p>
+<p>Finally, I had to update pages with comments to show the user's profile photo if they had one.
+For this part, I made the dynamic addition of elements more efficient by using <code>document.createElement</code> instead of appending a string to the comments container, which was 2x faster.
+I also took feedback from Kah Seng and added the time a person commented to provide more information and possibly sort by time commented in the future.</p>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">function fillComments(elementCss, posts) {
+    const commentsFragment = document.createDocumentFragment();
+
+    &#x2F;&#x2F; Underscored variables will be cloned later.
+
+    &#x2F;&#x2F; Main container
+    const _commentContainer = document.createElement(&quot;div&quot;);
+    _commentContainer.classList.add(&quot;rounded-lg&quot;, &quot;border-4&quot;, &quot;p-4&quot;, &quot;flex&quot;);
+
+    &#x2F;&#x2F; To display user&#x27;s profile picture (if they have one)
+    const _pfpImg = document.createElement(&quot;img&quot;);
+    _pfpImg.classList.add(&quot;rounded-full&quot;, &quot;h-12&quot;, &quot;w-12&quot;);
+
+    &#x2F;&#x2F; To display a grey circle (if user doesn&#x27;t have profile picture)
+    const _pfpDiv = document.createElement(&quot;div&quot;);
+    _pfpDiv.classList.add(&quot;rounded-full&quot;, &quot;bg-gray-200&quot;, &quot;h-12&quot;, &quot;w-12&quot;);
+</code></pre>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">    &#x2F;&#x2F; Comment container for _username and _comment
+    const _commentContent = document.createElement(&quot;div&quot;);
+    _commentContent.classList.add(&quot;ml-4&quot;, &quot;flow-col&quot;);
+
+    const _username = document.createElement(&quot;span&quot;);
+    _username.classList.add(&quot;font-bold&quot;);
+
+    const _datetime = document.createElement(&quot;span&quot;);
+    _datetime.classList.add(&quot;font-light&quot;, &quot;text-sm&quot;, &quot;ml-2&quot;, &quot;text-gray-300&quot;);
+    _datetime.style.color = &quot;rgb(156 163 175)&quot;;
+
+    const _comment = document.createElement(&quot;p&quot;);
+</code></pre>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">    for (const post of posts) {
+        let commentContainer = _commentContainer.cloneNode(true);
+        let pfp;
+        let commentContent = _commentContent.cloneNode(true);
+        let username = _username.cloneNode(true);
+        let datetime = _datetime.cloneNode(true);
+        let comment = _comment.cloneNode(true);
+
+        commentContainer.setAttribute(&quot;data-datetime&quot;, post.created_at)
+        if (post.has_img) {
+            pfp = _pfpImg.cloneNode(true);
+            pfp.setAttribute(&quot;src&quot;, post.imgUrl);
+        } else {
+            pfp = _pfpDiv.cloneNode(true);
+        }
+</code></pre>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">        username.insertAdjacentText(&quot;afterbegin&quot;, post.username);
+        datetime.insertAdjacentText(&quot;afterbegin&quot;, datetimeFormat(post.created_at));
+        comment.insertAdjacentText(&quot;afterbegin&quot;, post.post);
+
+        commentContent.appendChild(username);
+        commentContent.appendChild(datetime);
+        commentContent.appendChild(comment);
+        commentContainer.appendChild(pfp);
+        commentContainer.appendChild(commentContent);
+        commentsFragment.append(commentContainer);
+    }
+    $(elementCss).empty();
+    $(elementCss).append(commentsFragment);
+}
+</code></pre>
+<pre data-lang="javascript" class="language-javascript "><code class="language-javascript" data-lang="javascript">function datetimeFormat(datetime) {
+    const d = new Date(datetime);
+    const date = `${d.getDay()}&#x2F;${d.getMonth() + 1}&#x2F;${d.getFullYear() % 100}`;
+    const h = d.getHours();
+    const M = d.getMinutes();
+    const time = ` ${h &lt; 10 ? 0 : &quot;&quot;}${h}:${M &lt; 10 ? 0 : &quot;&quot;}${M}`;
+    return date + time;
+}
+</code></pre>
+
+</div>
+
+  </main>
+</body>
+
+</html>
